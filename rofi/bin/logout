@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# Tema
+theme="$HOME/.config/rofi/themes/logout_menu.rasi"
+
+# Definição das opções (Ícone + Nome para o script não se perder)
+ID_SHUTDOWN=" Shutdown"
+ID_REBOOT=" Reboot"
+ID_LOCK=" Lock"
+ID_SUSPEND="󰤄 Suspend"
+ID_LOGOUT="󰗽 Logout"
+YES=" Yes"
+NO=" No"
+
+# Rofi principal
+rofi_cmd() {
+    rofi -dmenu -p "Sessão" -mesg "Arch + Hyprland" -theme "${theme}"
+}
+
+# Rofi confirmação
+confirm_cmd() {
+    rofi -dmenu -p "Confirmação" -mesg "Confirmar ação?" -theme "${theme}"
+}
+
+# Execução
+run_cmd() {
+    local confirmation=$(echo -e "$YES\n$NO" | confirm_cmd)
+
+    if [[ "$confirmation" == "$YES" ]]; then
+        case "$1" in
+            --shutdown) systemctl poweroff ;;
+            --reboot)   systemctl reboot ;;
+            --suspend)  loginctl lock-session && systemctl suspend ;;
+            --logout)   hyprctl dispatch exit ;;
+        esac
+    fi
+}
+
+# --- Escolha ---
+chosen="$(echo -e "$ID_LOCK\n$ID_SUSPEND\n$ID_LOGOUT\n$ID_REBOOT\n$ID_SHUTDOWN" | rofi_cmd)"
+
+case "${chosen}" in
+    "$ID_SHUTDOWN") run_cmd --shutdown ;;
+    "$ID_REBOOT")   run_cmd --reboot ;;
+    "$ID_SUSPEND")  run_cmd --suspend ;;
+    "$ID_LOGOUT")   run_cmd --logout ;;
+    "$ID_LOCK")     hyprlock || loginctl lock-session ;;
+esac

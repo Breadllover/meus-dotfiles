@@ -1,0 +1,13 @@
+/* Purple Goth - Solid Version */
+
+@define-color module-bg rgba(8, 8, 11, 0.9);
+@define-color tooltip-bg rgba(8, 8, 11, 1);
+@define-color inactive #9370db;   /* IGUAL ao FG para não ter degradê feio */
+@define-color fg #9370db;         /* O seu roxo perfeito */
+@define-color workspace-fg #9370db;
+
+/* Unificando tudo para o mesmo tom */
+@define-color red #9370db;
+@define-color blue #9370db;
+@define-color yellow #9370db;
+@define-color green #9370db;
